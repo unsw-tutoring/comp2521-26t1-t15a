@@ -8,17 +8,28 @@ struct node {
     struct node *right;
 };
 
+// returns the number of values in a binary search tree
+int bstCountNodes(struct node *t) {
+    if (t == NULL) return 0;
+    return 1 + bstCountNodes(t->left) + bstCountNodes(t->right);
+}
+
 // returns the number of odd values in a binary search tree
 int bstCountOdds(struct node *t) {
-    // TODO
-    return 0;
+    if (t == NULL) return 0;
+    if (t->elem % 2 == 1) {
+        return 1 + bstCountOdds(t->left) + bstCountOdds(t->right);
+    } else {
+        return bstCountOdds(t->left) + bstCountOdds(t->right);
+    }
 }
 
 // count number of internal nodes in a given tree
 // an internal node is a node with at least one child node
 int bstCountInternal(struct node *t) {
-    // TODO
-    return 0;
+    if (t == NULL) return 0;
+    if (t->left == NULL && t->right == NULL) return 0;
+    return 1 + bstCountInternal(t->left) + bstCountInternal(t->right);
 }
 
 // returns the level of the node containing a given key if such a node exists,
@@ -26,15 +37,34 @@ int bstCountInternal(struct node *t) {
 // (when a given key is not in the binary search tree)
 // The level of the root node is zero.
 int bstNodeLevel(struct node *t, int key) {
-    // TODO
-    return 0;
+    if (t == NULL) return -1;
+    if (t->elem == key) return 0;
+
+    // if (key < t->elem) {
+    //     int res = bstNodeLevel(t->left, key);
+    //     if (res == -1) return -1;
+    //     return 1 + res;
+    // } else {
+    //     int res = bstNodeLevel(t->right, key);
+    //     if (res == -1) return -1;
+    //     return 1 + res;
+    // }
+
+    int res = bstNodeLevel((key < t->elem) ? t->left : t->right, key);
+    if (res == -1) return -1;
+    return 1 + res;
 }
 
 // counts the number of values that are greater than a given value.
 // This function should avoid visiting nodes that it doesn't have to visit
 int bstCountGreater(struct node *t, int val) {
-    // TODO
-    return 0;
+    if (t == NULL) return 0;
+
+    if (t->elem > val) {
+        return 1 + bstCountGreater(t->left, val) +
+               bstCountGreater(t->right, val);
+    }
+    return bstCountGreater(t->right, val);
 }
 
 #define NOT_HEIGHT_BALANCED -99
