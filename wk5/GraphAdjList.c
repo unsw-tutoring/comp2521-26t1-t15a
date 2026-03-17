@@ -12,6 +12,13 @@ struct graph {
 };
 
 Graph GraphNew(int nV) {
-    // TODO
-    return NULL;
+    Graph g = malloc(sizeof(struct graph));
+    g->nV = nV;
+    g->adjList = calloc(nV, sizeof(struct node *));
+    return g;
+}
+
+void GraphInsertEdge(Graph g, int v, int w) {
+    g->adjList[v] = linkedListInsert(g->adjList[v], w);
+    g->adjList[w] = linkedListInsert(g->adjList[w], v);
 }
